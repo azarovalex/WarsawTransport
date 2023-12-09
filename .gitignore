@@ -1,2 +1,4 @@
 scripts/.apikey
 WarsawTransport.xcodeproj
+
+!WarsawTransport.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved

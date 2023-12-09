@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import MapKit
 
 struct ContentView: View {
-    @Binding var activeTab: Tab
     @Environment(SceneDelegate.self) private var sceneDelegate
 
+    @Binding var activeTab: Tab
+
     var body: some View {
-        Map()
+        MapView()
         .tabSheet {
             BottomSheetContent(activeTab: activeTab)
         }

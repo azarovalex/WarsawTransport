@@ -1,11 +1,15 @@
 name: WarsawTransport
 options:
   bundleIdPrefix: eu.azarov
+packages:
+  MapboxMaps:
+    url: http://github.com/mapbox/mapbox-maps-ios
+    from: 11.0.0
 targets:
   WarsawTransport:
     type: application
     platform: iOS
-    deploymentTarget: "17.0"
+    deploymentTarget: 17.0
     sources: [WarsawTransport]
     settings:
       CURRENT_PROJECT_VERSION: 0
@@ -13,3 +17,12 @@ targets:
       GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
       INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+    postBuildScripts:
+      - path: scripts/insert_mapbox_token.sh
+        name: Insert Mapbox Access Token
+        showEnvVars: false
+        basedOnDependencyAnalysis: false
+        inputFiles:
+          - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
+    dependencies:
+      - package: MapboxMaps
