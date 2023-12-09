@@ -14,7 +14,7 @@ struct ContentView: View {
 
     var body: some View {
         MapView()
-        .tabSheet {
+        .bottomSheet {
             BottomSheetContent(activeTab: activeTab)
         }
         .onAppear {

@@ -24,5 +24,11 @@ targets:
         basedOnDependencyAnalysis: false
         inputFiles:
           - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
+      - path: scripts/insert_ztm_apikey.sh
+        name: Insert ZTM API key
+        showEnvVars: false
+        basedOnDependencyAnalysis: false
+        inputFiles:
+          - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
     dependencies:
       - package: MapboxMaps

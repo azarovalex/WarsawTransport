@@ -21,14 +21,46 @@ struct MapView: View {
         zoom: 12
     )
 
+    @State private var vehicles = [Vehicle]()
+    @State private var errorMessage: String?
+
     var body: some View {
-        Map(viewport: $viewport)
-            .mapStyle(.standard(lightPreset: colorScheme == .light ? .day : .dusk))
-            .ornamentOptions(.init(
-                scaleBar: .init(visibility: .hidden),
-                logo: .init(margins: Constants.ornamentMargins),
-                attributionButton: .init(margins: Constants.ornamentMargins)))
-            .ignoresSafeArea()
+        Map(viewport: $viewport) {
+            Puck2D(bearing: .heading)
+                    .showsAccuracyRing(true)
+
+            // TODO: Rewrite using PointAnnotationGroup for increased performance
+            ForEvery(vehicles) { vehicle in
+                MapViewAnnotation(coordinate: vehicle.position) {
+                    Image(systemName: "bus")
+                        .resizable()
+                        .foregroundStyle(colorScheme == .light ? .white : .white)
+                        .frame(width: 20, height: 20)
+                        .padding(10)
+                        .background(.blue.gradient, in: .circle)
+                }
+                .allowOverlap(true)
+            }
+        }
+        .mapStyle(.standard(lightPreset: colorScheme == .light ? .day : .night))
+        .ornamentOptions(.init(
+            scaleBar: .init(visibility: .hidden),
+            logo: .init(margins: Constants.ornamentMargins),
+            attributionButton: .init(margins: Constants.ornamentMargins)))
+        .ignoresSafeArea()
+        .task {
+            do {
+                vehicles = try await TransportService().refreshBusPositions()
+                print("Downloaded vehicles: \(vehicles)")
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+        .alert("Error", isPresented: .constant(errorMessage != nil), presenting: errorMessage) { _ in
+            Button("OK") {}
+        } message: { errorMessage in
+            Text(errorMessage)
+        }
     }
 }
 

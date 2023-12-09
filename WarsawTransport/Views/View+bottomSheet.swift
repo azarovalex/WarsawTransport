@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
-    func tabSheet<SheetContent: View>(
+    func bottomSheet<SheetContent: View>(
         initialHeight: CGFloat = 110,
         sheetCornerRadius: CGFloat = 15,
         @ViewBuilder content: () -> SheetContent
@@ -41,10 +41,10 @@ private struct BottomSheetModifier<SheetContent: View>: ViewModifier {
                         .fill(.clear)
                         .frame(height: CustomTabBar.Constants.height)
                 }
-                .presentationDetents([.height(initialHeight), .medium, .fraction(0.999)])
+                .presentationDetents([PresentationDetent.height(initialHeight), .fraction(0.4), .fraction(0.999)])
                 .presentationCornerRadius(sheetCornerRadius)
                 .presentationBackground(.regularMaterial)
-                .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                .presentationBackgroundInteraction(.enabled)
                 .interactiveDismissDisabled()
             })
     }
