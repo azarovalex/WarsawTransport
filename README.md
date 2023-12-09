@@ -2,6 +2,8 @@
 
 The WarsawTransport iOS app provides users with real-time information about public transportation in Warsaw. It utilizes the free public API provided by [api.um.warszawa.pl](https://api.um.warszawa.pl) to fetch data and deliver accurate details regarding bus, tram, and metro schedules, as well as other transit-related information.
 
+<img src="https://github.com/azarovalex/WarsawTransport/blob/main/screenshot.png?raw=true" width="300"/>
+
 ## Planned features:
 
 - Real-time updates on bus, tram, and metro schedules
