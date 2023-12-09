@@ -6,19 +6,24 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
+    @Binding var activeTab: Tab
+    @Environment(SceneDelegate.self) private var sceneDelegate
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Map()
+        .tabSheet {
+            BottomSheetContent(activeTab: activeTab)
         }
-        .padding()
+        .onAppear {
+            guard sceneDelegate.tabWindow == nil else { return }
+            sceneDelegate.addTabBar($activeTab)
+        }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(activeTab: .constant(.bus))
 }

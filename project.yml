@@ -1,0 +1,15 @@
+name: WarsawTransport
+options:
+  bundleIdPrefix: eu.azarov
+targets:
+  WarsawTransport:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources: [WarsawTransport]
+    settings:
+      CURRENT_PROJECT_VERSION: 0
+      MARKETING_VERSION: 0.0.1
+      GENERATE_INFOPLIST_FILE: YES
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
