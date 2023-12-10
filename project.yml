@@ -3,8 +3,11 @@ options:
   bundleIdPrefix: eu.azarov
 packages:
   MapboxMaps:
-    url: http://github.com/mapbox/mapbox-maps-ios
+    url: https://github.com/mapbox/mapbox-maps-ios
     from: 11.0.0
+  ComposableArchitecture:
+    url: https://github.com/pointfreeco/swift-composable-architecture
+    branch: observation-beta
 targets:
   WarsawTransport:
     type: application
@@ -32,3 +35,4 @@ targets:
           - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
     dependencies:
       - package: MapboxMaps
+      - package: ComposableArchitecture
