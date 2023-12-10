@@ -5,6 +5,7 @@
 //  Created by Alex Azarov on 12/9/23.
 //
 
+import Dependencies
 import SwiftUI
 @_spi(Experimental) import MapboxMaps
 
@@ -23,6 +24,8 @@ struct MapView: View {
 
     @State private var vehicles = [Vehicle]()
     @State private var errorMessage: String?
+
+    @Dependency(\.transportLiveLocationService) var liveTransport
 
     var body: some View {
         Map(viewport: $viewport) {
@@ -50,8 +53,7 @@ struct MapView: View {
         .ignoresSafeArea()
         .task {
             do {
-                vehicles = try await TransportService().refreshBusPositions()
-                print("Downloaded vehicles: \(vehicles)")
+                vehicles = try await liveTransport.fetchBusPositions()
             } catch {
                 errorMessage = error.localizedDescription
             }

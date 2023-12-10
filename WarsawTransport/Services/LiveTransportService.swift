@@ -1,5 +1,5 @@
 //
-//  TransportService.swift
+//  LiveTransportService.swift
 //  WarsawTransport
 //
 //  Created by Alex Azarov on 12/9/23.
@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Dependencies
 
 struct Vehicle: Identifiable {
     let id = UUID()
@@ -35,7 +36,7 @@ private struct ServerResponse: Decodable {
     let result: [VehicleDTO]
 }
 
-final class TransportService {
+final class LiveTransportService {
     private enum Constants {
         static let resourceId = "f2e5503e927d-4ad3-9500-4ab9e55deb59"
         static let busVehicleId = "1"
@@ -51,20 +52,31 @@ final class TransportService {
         return jsonDecoder
     }()
 
-    private lazy var apiKey: String = Bundle.main.infoDictionary!["ZTMAPIKey"] as! String
+    @Dependency(\.secretsProvider) var secretsProvider
 
-    func refreshBusPositions() async throws -> [Vehicle] {
-        var urlComponents = URLComponents(string: Constants.locationEndpoint)
-        urlComponents?.queryItems = [
+    func fetchBusPositions() async throws -> [Vehicle] {
+        var urlComponents = URLComponents(string: Constants.locationEndpoint)!
+        urlComponents.queryItems = [
             .init(name: "resource_id", value: Constants.resourceId),
             .init(name: "type", value: Constants.busVehicleId),
-            .init(name: "apikey", value: apiKey),
+            .init(name: "apikey", value: secretsProvider.getSecret(.ztmAPIKey)),
         ]
-        let url = urlComponents!.url!
+        let url = urlComponents.url!
 
         let (data, _) = try await URLSession.shared.data(from: url)
         let serverResponse = try jsonDecoder.decode(ServerResponse.self, from: data)
 
         return serverResponse.result.map(Vehicle.init)
+    }
+}
+
+extension LiveTransportService: DependencyKey {
+    static let liveValue = LiveTransportService()
+}
+
+extension DependencyValues {
+    var transportLiveLocationService: LiveTransportService {
+        get { self[LiveTransportService.self] }
+        set { self[LiveTransportService.self] = newValue }
     }
 }
